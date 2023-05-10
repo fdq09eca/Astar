@@ -12,7 +12,7 @@ void Menu::addItem(const wchar_t* caption, int pos, int cmdId, Menu* subMenu) {
 	s.hSubMenu = subMenu ? subMenu->hMenu : nullptr;
 	s.fType = MFT_STRING;
 	s.dwTypeData = const_cast<wchar_t*>(caption);
-	s.cch = wcslen(caption);
+	s.cch = (UINT) wcslen(caption);
 
 	if (!InsertMenuItem(hMenu, pos, true, &s)) {
 		assert(false);

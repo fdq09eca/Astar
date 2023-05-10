@@ -15,10 +15,10 @@ private:
 	MouseButton _mouseButtonState = MouseButton::NA;
 
 public:
-	HPEN dashRedPen;
-	HPEN solidRedPen;
-	HPEN solidBlackPen;
-	HBRUSH solidRedBrush;
+	HPEN dashRedPen = NULL;
+	HPEN solidRedPen = NULL;
+	HPEN solidBlackPen = NULL;
+	HBRUSH solidRedBrush = NULL;
 	Menu menu;
 
 	

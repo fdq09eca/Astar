@@ -1,13 +1,43 @@
 #pragma once
 #include "AppObject.h"
-
-
-
 enum class CellState {
 	Unknown = 0,
 	Visited = 1 << 1,
 	Block = 2 << 2,
 };
+
+inline constexpr CellState operator& (CellState x, CellState y) {
+	return static_cast<CellState>(static_cast<int>(x) & static_cast<int>(y));
+}
+
+inline constexpr CellState operator| (CellState x, CellState y) {
+	return static_cast<CellState>(static_cast<int>(x) | static_cast<int>(y));
+}
+
+inline constexpr CellState operator^(CellState x, CellState y) {
+	return static_cast<CellState> (static_cast<int>(x) ^ static_cast<int>(y));
+}
+
+inline constexpr CellState operator~(CellState x) {
+	return static_cast<CellState>(~static_cast<int>(x));
+}
+
+inline CellState& operator&=(CellState& x, CellState y) {
+	x = x & y;
+	return x;
+}
+
+inline CellState& operator|=(CellState& x, CellState y) {
+	x = x | y;
+	return x;
+}
+
+inline CellState& operator^=(CellState& x, CellState y) {
+	x = x ^ y;
+	return x;
+}
+
+
 
 class Cell
 {
@@ -55,33 +85,3 @@ public:
 
 };
 
-inline constexpr CellState operator& (CellState x, CellState y) {
-	return static_cast<CellState>(static_cast<int>(x) & static_cast<int>(y));
-}
-
-inline constexpr CellState operator| (CellState x, CellState y) {
-	return static_cast<CellState>(static_cast<int>(x) | static_cast<int>(y));
-}
-
-inline constexpr CellState operator^(CellState x, CellState y) {
-	return static_cast<CellState> (static_cast<int>(x) ^ static_cast<int>(y));
-}
-
-inline constexpr CellState operator~(CellState x) {
-	return static_cast<CellState>(~static_cast<int>(x));
-}
-
-inline CellState& operator&=(CellState& x, CellState y) {
-	x = x & y;
-	return x;
-}
-
-inline CellState& operator|=(CellState& x, CellState y) {
-	x = x | y;
-	return x;
-}
-
-inline CellState& operator^=(CellState& x, CellState y) {
-	x = x ^ y;
-	return x;
-}

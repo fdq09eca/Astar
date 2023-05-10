@@ -1,5 +1,7 @@
 #pragma once
-#include "Util.h";
+
+#include "Util.h"
+
 #define MCMD_FILE							900
 #define MCMD_FILE_OPEN						901
 #define MCMD_FILE_SAVE						902

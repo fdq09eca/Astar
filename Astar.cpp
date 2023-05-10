@@ -142,18 +142,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	} break;
 
-	case WM_KEYDOWN: {
-		switch (wParam)
-		{
-		//case VK_F1: { cuurentAppObjType = AppObjectType::Line; } break;
-		//case VK_F1: { cuurentAppObjType = AppObjectType::Line; } break;
-		//case VK_F2: { cuurentAppObjType = AppObjectType::Point; } break;
-		//case VK_F3: { App::Instance()->save();} break;
-		//case VK_F4: { App::Instance()->load();} break;
+	//case WM_KEYDOWN: {
+	//	switch (wParam)
+	//	{
+	//	//case VK_F1: { cuurentAppObjType = AppObjectType::Line; } break;
+	//	//case VK_F1: { cuurentAppObjType = AppObjectType::Line; } break;
+	//	//case VK_F2: { cuurentAppObjType = AppObjectType::Point; } break;
+	//	//case VK_F3: { App::Instance()->save();} break;
+	//	//case VK_F4: { App::Instance()->load();} break;
 
-		default: { } break;
-		}
-	} break;
+	//	default: { } break;
+	//	}
+	//} break;
 
 	case WM_LBUTTONDOWN:
 	case WM_MBUTTONDOWN:
