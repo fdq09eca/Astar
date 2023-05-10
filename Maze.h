@@ -8,6 +8,8 @@ public:
 	std::vector<Cell> cells;
 	int nRow = 0;
 	int nCol = 0;
+	int yOffset = 0; 
+	int xOffset = 0;
 	
 	void init(int nRow_ = 10, int nCol_ = 10) {
 		nRow = nRow_;
@@ -15,9 +17,6 @@ public:
 		_type = Type::Maze;
 		int nCells = nRow_ * nCol_;
 		cells.resize(nCells);
-		/*for (int i = 0; i < nCells; i++) {
-			cells.emplace_back();
-		}*/
 	}
 
 	const Cell& cell(int r, int c) {
@@ -36,7 +35,7 @@ public:
 	int height() const { return nRow * Cell::size; }
 
 	void draw(HDC hdc) const {
-		int yOffset = 0; int xOffset = 0;
+		
 		POINT pos{ xOffset, yOffset };
 		int w = width();
 		for (const auto& c : cells) {
