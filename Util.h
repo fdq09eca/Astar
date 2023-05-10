@@ -10,6 +10,17 @@
 #include <iostream>
 #include <fstream>
 
+
+#define COLOR_WHITE		RGB(255,255,255)
+#define COLOR_RED		RGB(255,0  ,0  )
+#define COLOR_GREEN		RGB(0  ,255,0  )
+#define COLOR_BLUE		RGB(0  ,  0,255)
+#define COLOR_BLACK		RGB(0  ,0  ,0  )
+#define COLOR_GREY		RGB(128,128,128)
+#define COLOR_YELLOW	RGB(255,234,0  )
+
+
+
 class NonCopyable {
 
 private:
@@ -229,4 +240,19 @@ inline std::wstring my_getCurrentDirectory() {
 template<class T>
 inline void my_bzero(T& s) {
 	memset(&s, 0, sizeof(s));
+}
+
+
+
+inline int getRandIntInRange(int min_, int max_) { // not uniformly distributed.
+	
+	assert(min_ < max_);
+	int range = max_ - min_ + 1;
+	assert(range > 0);
+	int num = rand() % range + min_;
+	return num;
+}
+
+inline int getRandInt(int max_) {
+	return getRandIntInRange(0, max_);
 }

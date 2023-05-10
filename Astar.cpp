@@ -191,6 +191,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 int main() {
-	wWinMain(GetInstanceModule(nullptr), nullptr, 0, SW_SHOW);
+	std::srand((uint32_t)std::time(0));
+	wWinMain(GetInstanceModule(0), 0, 0, SW_SHOW);
 	return 0;
 }

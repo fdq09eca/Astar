@@ -15,8 +15,8 @@ public:
 		nRow = nRow_;
 		nCol = nCol_;
 		_type = Type::Maze;
-		int nCells = nRow_ * nCol_;
-		cells.resize(nCells);
+		cells.resize(nCells());
+		gen();
 	}
 
 	const Cell& cell(int r, int c) {
@@ -33,6 +33,19 @@ public:
 
 	int width() const { return nCol * Cell::size; }
 	int height() const { return nRow * Cell::size; }
+
+	int nCells() const { return nRow * nCol; }
+
+	void gen() {
+		int n = nCells();
+		int p = n  * 1/2;
+		for (auto& c : cells) {
+			int r = getRandInt(n);
+			if (r > p) {
+				c.setBlock(true);
+			}
+		}
+	}
 
 	void draw(HDC hdc) const {
 		
