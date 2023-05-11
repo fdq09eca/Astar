@@ -42,13 +42,8 @@ class Cell
 {
 	using State = CellState;
 	
-	bool isState(State s) const { return (state & s) == s; }
-	void setState(State s, bool b) {
-		if (b)  
-			state |= s; 
-		else 
-			state &= ~s; 
-	}
+	bool isState(State s) const;
+	void setState(State s, bool b);
 
 	State state = State::Unknown;
 
@@ -57,34 +52,17 @@ public:
 
 	Cell(){ init(); }
 
-	void init() {
-		setBlock(false);
-		setVisit(false);
-	}
+	inline void init()				{ setBlock(false); setVisit(false); }
+	inline void setBlock(bool b)	{ setState(State::Block, b); }
+	inline void setVisit(bool b)	{ setState(State::Visited, b); }
 
-	void setBlock(bool b) { setState(State::Block, b); }
-	void setVisit(bool b) { setState(State::Visited, b); }
-
-	bool isVisited() const {
-		if (isState(State::Block)) return false;
-		return isState(State::Visited); 
-	}
+	bool isVisited() const;
 	
-	bool isBlock() const { return isState(State::Block); }
+	bool isBlock() const;
 
-	COLORREF color() const {
-		if (isBlock()) 
-			return COLOR_BLACK;
-		return isVisited() ? COLOR_GREY : COLOR_WHITE;
-	}
+	COLORREF color() const;
 
-	inline void drawAt(HDC hdc, POINT pos) const { 
-		auto oldBrush = SelectObject(hdc, GetStockObject(DC_BRUSH));
-		auto oldColor = SetDCBrushColor(hdc, color());
-		::Rectangle(hdc, pos.x, pos.y, pos.x + size, pos.y + size); 
-		SetDCBrushColor(hdc, oldColor);
-		SelectObject(hdc, oldBrush);
-	};
+	void drawAt(HDC hdc, POINT pos) const;
 
 
 };
