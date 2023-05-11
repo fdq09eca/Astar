@@ -12,6 +12,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -33,8 +34,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_ASTAR, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
     App app;
+	std::srand((uint32_t)std::time(0));
     app.init();
-
     // Perform application initialization:
     if (!InitInstance (hInstance, nCmdShow))
     {
@@ -109,6 +110,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
    App::Instance()->setHwnd(hWnd);
    App::Instance()->initMenu();
+   App::Instance()->initTimer();
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
@@ -129,6 +131,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_TIMER: {
+		App::Instance()->update();
+	} break;
+	
 	case WM_CREATE: { } break;
 	case WM_COMMAND:
 	{
@@ -191,7 +197,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 int main() {
-	std::srand((uint32_t)std::time(0));
 	wWinMain(GetInstanceModule(0), 0, 0, SW_SHOW);
 	return 0;
 }

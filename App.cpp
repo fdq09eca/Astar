@@ -1,11 +1,25 @@
 #include "App.h"
-
+#define APP_TIMER  512
 App* App::_instance = nullptr;
+
+void App::destroy()
+{
+	if (captureObj) { captureObj = nullptr; }
+	DeleteObject(dashRedPen);
+	DeleteObject(solidBlackPen);
+	DeleteObject(solidRedBrush);
+	if (APP_TIMER) KillTimer(_hWnd, APP_TIMER);
+}
+
+void App::initTimer(int fps) {
+	assert(_hWnd != NULL);
+	SetTimer(_hWnd, APP_TIMER, (int) (1000 / fps), (TIMERPROC) NULL);     
+}
 
 void App::init() {
 	assert(_instance == nullptr);
 	_instance = this;
-
+	
 	// create pen and brush..
 	solidBlackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0)); // black solid pen
 	
@@ -14,9 +28,11 @@ void App::init() {
 	solidRedBrush = ::CreateSolidBrush(RGB(255, 0, 0)); // red solid brush
 
 	// try
-	auto m = std::make_unique<Maze>();
-	m->init(10, 10);
-	objList.emplace_back(std::move(m));
+	//auto m = std::make_unique<Maze>();
+	//m->init(10, 10);
+	//objList.emplace_back(std::move(m));
+
+	maze.init(10, 10);
 
 }
 
@@ -28,6 +44,7 @@ void App::setHwnd(HWND hWnd_) {
 void App::draw(HDC hdc_)  {
 	backBuffer.clear();
 	
+	maze.draw(backBuffer.dc());
 	
 	for (const auto& p : objList) {
 		p->draw(backBuffer.dc());

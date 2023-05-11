@@ -11,55 +11,25 @@ public:
 	int yOffset = 0; 
 	int xOffset = 0;
 	
-	void init(int nRow_ = 10, int nCol_ = 10) {
-		nRow = nRow_;
-		nCol = nCol_;
-		_type = Type::Maze;
-		cells.resize(nCells());
-		gen();
-	}
+	void init(int nRow_ = 10, int nCol_ = 10);
 
-	const Cell& cell(int r, int c) {
+	const Cell* cellPtr(int r, int c) const;
 
-		return cells[r * nRow + c];
-	}
+	Cell* cellPtr(int r, int c);
+	
+	const Cell& cell(int r, int c) const;
+	
+	const Cell& cell(POINT p) const;
 
-	const Cell& cell(POINT p) {
-		int r = p.y / Cell::size;
-		int c = p.x / Cell::size;
-		return cell(r, c);
+	inline int width() const { return nCol * Cell::size; }
+	inline int height() const { return nRow * Cell::size; }
 
-	}
+	inline int nCells() const { return nRow * nCol; }
+	inline void reset() { for (auto& c : cells) { c.init(); } }
+	
+	void gen(int nb = 10);
 
-	int width() const { return nCol * Cell::size; }
-	int height() const { return nRow * Cell::size; }
-
-	int nCells() const { return nRow * nCol; }
-
-	void gen() {
-		int n = nCells();
-		int p = n  * 1/2;
-		for (auto& c : cells) {
-			int r = getRandInt(n);
-			if (r > p) {
-				c.setBlock(true);
-			}
-		}
-	}
-
-	void draw(HDC hdc) const {
-		
-		POINT pos{ xOffset, yOffset };
-		int w = width();
-		for (const auto& c : cells) {
-			c.drawAt(hdc, pos);
-			pos.y += Cell::size;
-			if (pos.y >= w) {
-				pos.x += Cell::size;
-				pos.y = yOffset;
-			}
-		}
-	}
+	virtual void draw(HDC hdc) const override;
 
 	
 };

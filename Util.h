@@ -245,9 +245,8 @@ inline void my_bzero(T& s) {
 
 
 inline int getRandIntInRange(int min_, int max_) { // not uniformly distributed.
-	
 	assert(min_ < max_);
-	int range = max_ - min_ + 1;
+	int range = max_ + 1 - min_;
 	assert(range > 0);
 	int num = rand() % range + min_;
 	return num;
@@ -255,4 +254,13 @@ inline int getRandIntInRange(int min_, int max_) { // not uniformly distributed.
 
 inline int getRandInt(int max_) {
 	return getRandIntInRange(0, max_);
+}
+
+
+inline bool hasValue(const std::vector<int>& vec, int val) {
+	for (const auto& v : vec) { 
+		if (v == val) 
+			return true; 
+	}
+	return false;
 }

@@ -38,7 +38,6 @@ inline CellState& operator^=(CellState& x, CellState y) {
 }
 
 
-
 class Cell
 {
 	using State = CellState;
@@ -56,8 +55,9 @@ class Cell
 public:
 	static const int size = 20;
 
-	Cell()
-	{
+	Cell(){ init(); }
+
+	void init() {
 		setBlock(false);
 		setVisit(false);
 	}
@@ -88,4 +88,5 @@ public:
 
 
 };
+
 

@@ -20,6 +20,7 @@ public:
 	HPEN solidBlackPen = NULL;
 	HBRUSH solidRedBrush = NULL;
 	Menu menu;
+	Maze maze;
 
 	
 	std::vector<std::unique_ptr<AppObject>> objList;
@@ -32,14 +33,33 @@ public:
 	
 	static App* Instance() { return _instance; }
 	
-	~App() {  
-		if (captureObj) { captureObj = nullptr; }
-		DeleteObject(dashRedPen);
-		DeleteObject(solidBlackPen);
-		DeleteObject(solidRedBrush);
-	}
+	~App() { destroy(); }
 
 	void init();
+	void destroy();
+
+	/*Maze& maze_() {
+		for (auto& obj : objList) {
+			if (obj->type() == AppObjectType::Maze) {
+				auto m = (Maze) *obj ;
+				return m;
+			}
+		}
+	}*/
+	
+	void initTimer(int fps = 10);
+	void initMenu(); 
+	void update() { 
+		static int n = 0;
+		maze.gen(n);
+		InvalidateRect(_hWnd, nullptr, false);
+		n++;
+		if (n > maze.nCells()) {
+			n = 0;
+		}
+	};
+
+
 
 	void setHwnd(HWND hWnd_);
 
@@ -58,7 +78,6 @@ public:
 	inline void save(const wchar_t* fpath) const { };
 	inline void load(const wchar_t* fpath) { };
 	
-	void initMenu(); 
 };
 
 //extern App* g_internal_app_ptr;
