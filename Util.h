@@ -4,6 +4,7 @@
 #include "windowsx.h"
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 #include <cassert>
 #include <cstdint>

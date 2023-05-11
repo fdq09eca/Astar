@@ -36,19 +36,18 @@ const Cell& Maze::cell(POINT p) const {
 
 void Maze::gen(int nb) {
 	reset();
-	std::vector<int> vec;
+	std::set<int> vals;
 	int i;
 	for (int n = 0; n < nb; n++) {
 		Cell* p = nullptr;
 		while (true) {
 			i = getRandInt(nRow * nCol - 1);
-			if (hasValue(vec, i)) {
-				if (vec.size() >= nb) return;
+			if (auto b = vals.find(i) != vals.end()) {
 				continue;
-			}
+			};
 			break;
 		}
-		vec.emplace_back(i);
+		vals.insert(i);
 		cells[i].setBlock(true);
 	}
 
