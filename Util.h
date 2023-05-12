@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 
-
+// win32 
 #define COLOR_WHITE		RGB(255,255,255)
 #define COLOR_RED		RGB(255,0  ,0  )
 #define COLOR_GREEN		RGB(0  ,255,0  )
@@ -19,8 +19,6 @@
 #define COLOR_BLACK		RGB(0  ,0  ,0  )
 #define COLOR_GREY		RGB(128,128,128)
 #define COLOR_YELLOW	RGB(255,234,0  )
-
-
 
 class NonCopyable {
 
@@ -110,59 +108,17 @@ public:
 
 	~BackBuffer() { destroy(); }
 
-	void create(HWND hWnd_) {
-		destroy();
-		HDC wndDC = GetDC(hWnd_);
-		_dc = CreateCompatibleDC(wndDC);
-
-		RECT rc;
-		GetClientRect(hWnd_, &rc);
-		_h = rc.bottom - rc.top;
-		_w = rc.right - rc.left;
-		_bitmap = CreateCompatibleBitmap(wndDC, _w, _h); //https://stackoverflow.com/questions/7134465/the-result-of-createcompatibledc-only-has-two-colors
-		SelectObject(_dc, _bitmap);
-		_bgColor = (HBRUSH)GetStockObject(WHITE_BRUSH);
-
-		ReleaseDC(hWnd_, wndDC);
-	}
+	void create(HWND hWnd_);
 
 	HDC dc() const { return _dc; }
 
-	void destroy() {
-		if (_dc) {
-			DeleteDC(_dc);
-			_dc = NULL;
-		}
+	void destroy();
 
-		if (_bitmap) {
-			DeleteObject(_bitmap);
-			_bitmap = NULL;
-		}
-	}
+	void clear();
 
-	void clear() {
-		RECT rc{ 0, 0, _w, _h };
-		FillRect(_dc, &rc, _bgColor);
-	}
-
-	void draw(HDC hdc, int x = 0, int y = 0) {
-		BitBlt(hdc, x, y, _w, _h, _dc, 0, 0, SRCCOPY);
-	}
+	void draw(HDC hdc, int x = 0, int y = 0);
 };
 
-inline void writeInt(std::ofstream& f, int v) { f.write((char*)&v, sizeof(v)); } // worst implementation, problem: alignment; different cpu archi i.e. little/big endian?
-inline void writeString(std::ofstream& f, const char* str) { f.write(str, strlen(str)); }
-
-inline void readString(std::ifstream& f, char* buff, int nChar) {
-	assert(!f.eof());
-	f.read(buff, nChar);
-}
-
-inline void readInt(std::ifstream& f, int& v) {
-	assert(!f.eof());
-	f.read((char*)&v, sizeof(v));
-
-}
 
 class Vector2D {
 
@@ -170,35 +126,20 @@ public:
 	double x = 0;
 	double y = 0;
 
-	Vector2D(double _x = 0, double _y = 0) : x(_x), y(_y) { }
-	Vector2D(const Vector2D& v) { //copy
-		x = v.x;
-		y = v.y;
-	}
+	Vector2D(double _x = 0, double _y = 0);
+	Vector2D(const Vector2D& v);
 
 	~Vector2D() { x = 0; y = 0; }
 
-	double distance(const Vector2D& p) const {
-		return (p - *this).length();
-	}
+	double distance(const Vector2D& p) const;
 
-	double length() const {
-		return sqrt(x * x + y * y);
-	}
+	double length() const;
 
-	Vector2D unitVector() const {
-		return *this / length();
-	}
+	Vector2D unitVector() const;
 
-	double dotProduct(const Vector2D& p) const {
-		return x * p.x + y * p.y;
-	}
+	double dotProduct(const Vector2D& p) const;
 
-	Vector2D project(const Vector2D& v) const {
-		Vector2D u = v.unitVector();
-		double projectLen = dotProduct(u);
-		return u * projectLen;
-	}
+	Vector2D project(const Vector2D& v) const;
 
 	inline void operator=(const Vector2D& p) { *this = Vector2D(p); } //recursive here!!
 
@@ -228,46 +169,15 @@ public:
 	inline bool operator!=(const Vector2D& v) const { return v.x != x || v.y != y; }
 	inline bool operator==(const Vector2D& v) const { return !operator!=(v); }
 
-
 };
 
-inline std::wstring my_getCurrentDirectory() {
-	wchar_t buff[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, buff);
-	std::wstring r = buff;
-	return r;
-};
+
 
 template<class T>
-inline void my_bzero(T& s) {
-	memset(&s, 0, sizeof(s));
-}
+inline void my_bzero(T& s) { memset(&s, 0, sizeof(s));}
 
-
-
-inline int getRandIntInRange(int min_, int max_) { 
-	
-	/*
-	* // exclusive
-	* // not uniformly distributed.
-	* v1 = rand() % 100;         // v1 in the range 0 to 99
-	* v2 = rand() % 100 + 1;     // v2 in the range 1 to 100
-	* v3 = rand() % 30 + 1985;   // v3 in the range 1985-2014 
-	*/
-
-	assert(min_ < max_);
-	int range = max_ - min_;
-	if (!range) return min_;
-	int num = rand() % range + min_;
-	return num;
-}
-
-inline int getRandInt(int max_ = RAND_MAX) {
-	return getRandIntInRange(0, max_);
-}
-
-
-inline bool hasValue(const std::vector<int>& vec, int val) {
+template<class T>
+inline bool contains(const std::vector<T>& vec, T val) {
 	for (const auto& v : vec) {
 		if (v == val)
 			return true;
@@ -276,17 +186,17 @@ inline bool hasValue(const std::vector<int>& vec, int val) {
 }
 
 enum class MyDirection { NA, North, East, South, West };
+MyDirection opposite(MyDirection d);
 
-inline MyDirection opposite(MyDirection d) {
-	using D = MyDirection;
-	switch (d)
-	{
-	case D::North: return D::South;
-	case D::East:  return D::West;
-	case D::South: return D::North;
-	case D::West:  return D::East;
-	default: 
-		assert(false);
-	}
-	return D::NA;
-}
+
+// Helpers
+int getRandIntInRange(int min_, int max_);
+int getRandInt(int max_ = RAND_MAX);
+std::wstring my_getCurrentDirectory(); // win32
+
+// Serialisation
+void writeInt(std::ofstream& f, int v); // worst implementation, problem: alignment; different cpu archi i.e. little/big endian?
+void writeString(std::ofstream& f, const char* str);
+
+void readString(std::ifstream& f, char* buff, int nChar);
+void readInt(std::ifstream& f, int& v);
