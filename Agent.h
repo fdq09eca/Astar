@@ -23,19 +23,21 @@ private:
 	
 	std::vector<Index> history;
 	Maze& maze();
+	bool complete = false;
 
 public:
 	Cell* currentCellPtr();
+	D nextDirection();
 	
 	void init(int r_, int c_, int stepSize_) { 
 		r = r_; 
 		c = c_;
 		stepSize = stepSize_;
-		currentCellPtr()->setVisit(true);
-		history.emplace_back(r, c);
+		onVisitCell();
 	}
-
-
+	
+	inline void reset(){ init(1, 1, stepSize); }
+	
 	void move(D d);
 
 	void update();
@@ -47,15 +49,13 @@ public:
 	const std::vector<D> unVisitedNeigbourDirections();
 	
 	D backtrack();
+	
+	void draw(HDC hdc);
 
-	D nextDirection() {
-		auto dirs = unVisitedNeigbourDirections();
-		int nDirs = static_cast<int>(dirs.size());
-		if (!nDirs) return D::NA;
-		D nd = static_cast<D>(getRandInt(nDirs) + 1);
-		return nd;
-	}
+	void onComplete();
 
-	void draw(HDC hdc) ;
+	void onVisitCell();
+
+	void breakWall(D nd);
 };
 

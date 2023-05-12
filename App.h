@@ -52,7 +52,8 @@ public:
 	void initTimer(int fps = 10);
 	void initMenu(); 
 	void update() { 
-		
+		agent.update();
+		InvalidateRect(_hWnd, nullptr, false);
 	};
 
 

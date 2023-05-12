@@ -31,6 +31,14 @@ public:
 
 	void gen();
 
+	void restart() {
+		for (auto& c : cells) { 
+			if (c.isBlock()) 
+				continue;
+			c.reset(); 
+		}
+	}
+
 	POINT cellPos(int r, int c) const;
 
 	

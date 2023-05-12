@@ -10,51 +10,48 @@ void Agent::move(D d) {
 	
 	switch (d)
 	{
-		case D::North: { r -= stepSize; } return;
-		case D::East: { c -= stepSize; } return;
-		case D::South: { r += stepSize; } return;
-		case D::West: { c += stepSize; } return;
+		case D::North: { r -= stepSize; } break;
+		case D::East: { c += stepSize; } break;
+		case D::South: { r += stepSize; } break;
+		case D::West: { c -= stepSize; } break;
 		default: { assert(false); } return;
 	}
 	
-	Cell* p = currentCellPtr();
-	assert(p);
-
-	p->setVisit(true);
-	history.emplace_back(r, c);
-
+	onVisitCell();
 	return;
 }
 
 void Agent::update() {
+	if (complete) return;
+	
 	D nd = nextDirection();
 	
 	if (nd == D::NA)
 		nd = backtrack();
 	
-	if (nd == D::NA) 
+	if (nd == D::NA) {
+		onComplete();
 		return;
+	}
 
 	move(nd);
 	
 	//if (AgentType::MazeBuilder) {
-	Cell* p = peek(opposite(nd), 1);
-	if (p && p->isBlock()) 
-		p->setBlock(false);
+	breakWall(opposite(nd));
 	//}
 }
 
 Cell* Agent::peek(D d) { return peek(d, stepSize); }
 
 Cell* Agent::peek(D d, int peekSize) {
-	int pr = 0;
-	int pc = 0;
+	int pr = r;
+	int pc = c;
 	switch (d)
 	{
 		case D::North: { pr = r - peekSize; } break;
-		case D::East: { pc = c - peekSize; } break;
+		case D::East: { pc = c + peekSize; } break;
 		case D::South: { pr = r + peekSize; } break;
-		case D::West: { pc = c + peekSize; } break;
+		case D::West: { pc = c - peekSize; } break;
 		default: { assert(false); } break;
 	}
 	Cell* p = maze().cellPtr(pr, pc);
@@ -68,9 +65,12 @@ const std::vector<D> Agent::unVisitedNeigbourDirections()
 	D ds[] = {D::North, D::East, D::South, D::West};
 	for (D d : ds) {
 		auto p = peek(d); 
-		if (!p)					continue;
-		if (!p->isBlock())		continue;
-		if (!p->isVisited())	continue;
+		if (!p)					
+			continue;
+		if (p->isBlock())		
+			continue;
+		if (p->isVisited())	
+			continue;
 		dirs.emplace_back(d);
 	}
 	return dirs;
@@ -94,6 +94,16 @@ D Agent::backtrack() {
 	return D::NA;
 }
 
+inline D Agent::nextDirection() {
+	auto dirs = unVisitedNeigbourDirections();
+	int nDirs = static_cast<int>(dirs.size());
+	if (!nDirs) return D::NA;
+	int idx = getRandInt(nDirs);
+	assert(idx < nDirs);
+	return dirs[idx];
+	
+}
+
 void Agent::draw(HDC hdc) {
 	POINT pos = maze().cellPos(r, c);
 	auto oldBrush = SelectObject(hdc, GetStockObject(DC_BRUSH));
@@ -101,4 +111,26 @@ void Agent::draw(HDC hdc) {
 	::Rectangle(hdc, pos.x, pos.y, pos.x + Cell::size, pos.y + Cell::size);
 	SetDCBrushColor(hdc, oldColor);
 	SelectObject(hdc, oldBrush);
+}
+
+inline void Agent::onComplete() {
+	//complete = true;
+	//maze().restart();
+	maze().gen();
+	reset();
+}
+
+inline void Agent::onVisitCell() {
+	Cell* p = currentCellPtr();
+	assert(p);
+	p->setVisit(true);
+	history.emplace_back(r, c);
+}
+
+inline void Agent::breakWall(D nd) {
+	Cell* p = peek(nd, 1);
+	if (p && p->isBlock()) {
+		p->setBlock(false);
+		p->setVisit(true);
+	}
 }
