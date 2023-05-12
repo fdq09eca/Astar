@@ -3,7 +3,6 @@
 void Maze::init(int nRow_, int nCol_) {
 	nRow = nRow_;
 	nCol = nCol_;
-	_type = Type::Maze;
 	cells.resize(nCells());
 	gen();
 }
@@ -19,6 +18,8 @@ Cell* Maze::cellPtr(int r, int c) {
 		return &cells[r * nCol + c];
 	return nullptr;
 }
+
+
 
 const Cell& Maze::cell(int r, int c) const {
 	auto p = cellPtr(r, c);
@@ -43,9 +44,7 @@ void Maze::gen(int nb) {
 		Cell* p = nullptr;
 		while (true) {
 			i = getRandInt(nRow * nCol - 1);
-			if (auto b = vals.find(i) != vals.end()) {
-				continue;
-			};
+			if (auto b = vals.find(i) != vals.end()) { continue; };
 			break;
 		}
 		vals.insert(i);
@@ -74,18 +73,34 @@ void Maze::gen() {
 	
 }
 
-
+POINT Maze::cellPos(int r, int c)  const {
+	POINT pos;
+	pos.x = r * Cell::size + xOffset;
+	pos.y = c * Cell::size + yOffset;
+	return pos;
+}
 
 void Maze::draw(HDC hdc) const {
+	//POINT pos{ xOffset, yOffset };
+	//int w = width();
+	//
+	//for (const auto& c : cells) {
 
-	POINT pos{ xOffset, yOffset };
-	int w = width();
-	for (const auto& c : cells) {
-		c.drawAt(hdc, pos);
-		pos.y += Cell::size;
-		if (pos.y >= w) {
-			pos.x += Cell::size;
-			pos.y = yOffset;
+	//	c.drawAt(hdc, pos);
+	//	pos.x += Cell::size;
+	//	if (pos.x >= w) {
+	//		pos.y += Cell::size;
+	//		pos.x = xOffset;
+	//	}
+	//}
+
+	for (int c = 0; c < nCol; c++) {
+		for (int r = 0; r < nRow; r++) {
+			auto p = cellPtr(r, c);
+			assert(p);
+			POINT pos = cellPos(r, c);
+			p->drawAt(hdc, pos);
+
 		}
 	}
 }
