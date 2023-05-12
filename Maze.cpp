@@ -91,6 +91,41 @@ void Maze::draw(HDC hdc) const {
 }
 
 /*
+* 
+* 
+* 
+{
+	{ D::East ,	D::North,	D::South,	D::West	 },
+	{ D::East ,	D::North,	D::West	,	D::South },
+	{ D::East ,	D::South,	D::North,	D::West	 },
+	{ D::East ,	D::South,	D::West	,	D::North },
+	{ D::East ,	D::West	,	D::North,	D::South },
+	{ D::East ,	D::West	,	D::South,	D::North },
+	{ D::West ,	D::East	,	D::North,	D::South },
+	{ D::West ,	D::East	,	D::South,	D::North },
+	{ D::West ,	D::North,	D::East	,	D::South },
+	{ D::West ,	D::North,	D::South,	D::East	 },
+	{ D::West ,	D::South,	D::East	,	D::North },
+	{ D::West ,	D::South,	D::North,	D::East	 },
+	{ D::North,	D::East	,	D::South,	D::West	 },
+	{ D::North,	D::East	,	D::West	,	D::South },
+	{ D::North,	D::South,	D::East	,	D::West	 },
+	{ D::North,	D::South,	D::West	,	D::East	 },
+	{ D::North,	D::West	,	D::East	,	D::South },
+	{ D::North,	D::West	,	D::South,	D::East	 },
+	{ D::South,	D::East	,	D::North,	D::West	 },
+	{ D::South,	D::East	,	D::West	,	D::North },
+	{ D::South,	D::North,	D::East	,	D::West	 },
+	{ D::South,	D::North,	D::West	,	D::East	 },
+	{ D::South,	D::West	,	D::East	,	D::North },
+	{ D::South,	D::West	,	D::North,	D::East	 }
+}
+#N : 24
+
+
+*/
+
+/*
 // Online C++ compiler to run C++ program online
 #include <iostream>
 #include <vector>
