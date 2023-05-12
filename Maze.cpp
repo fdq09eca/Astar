@@ -54,6 +54,7 @@ void Maze::gen(int nb) {
 
 void Maze::gen() {
 	reset();
+	assert(nCol % 2 && nRow % 2); // for now.
 	for (int c = 0; c < nCol; c++) {
 		for (int r = 0; r < nRow; r++) {
 			if (!(r % 2) || !(c % 2)) {
@@ -61,12 +62,6 @@ void Maze::gen() {
 				assert(p);
 				p->setBlock(true);
 			}
-
-			/*if (nCol % 2 == 0 && c == 0) {
-				auto p = cellPtr(r, c);
-				assert(p);
-				p->setBlock(true);
-			}*/
 		}
 	}
 
@@ -81,19 +76,6 @@ POINT Maze::cellPos(int r, int c)  const {
 }
 
 void Maze::draw(HDC hdc) const {
-	//POINT pos{ xOffset, yOffset };
-	//int w = width();
-	//
-	//for (const auto& c : cells) {
-
-	//	c.drawAt(hdc, pos);
-	//	pos.x += Cell::size;
-	//	if (pos.x >= w) {
-	//		pos.y += Cell::size;
-	//		pos.x = xOffset;
-	//	}
-	//}
-
 	for (int c = 0; c < nCol; c++) {
 		for (int r = 0; r < nRow; r++) {
 			auto p = cellPtr(r, c);
@@ -104,78 +86,3 @@ void Maze::draw(HDC hdc) const {
 		}
 	}
 }
-
-/*
-* 
-* 
-* 
-{
-	{ D::East ,	D::North,	D::South,	D::West	 },
-	{ D::East ,	D::North,	D::West	,	D::South },
-	{ D::East ,	D::South,	D::North,	D::West	 },
-	{ D::East ,	D::South,	D::West	,	D::North },
-	{ D::East ,	D::West	,	D::North,	D::South },
-	{ D::East ,	D::West	,	D::South,	D::North },
-	{ D::West ,	D::East	,	D::North,	D::South },
-	{ D::West ,	D::East	,	D::South,	D::North },
-	{ D::West ,	D::North,	D::East	,	D::South },
-	{ D::West ,	D::North,	D::South,	D::East	 },
-	{ D::West ,	D::South,	D::East	,	D::North },
-	{ D::West ,	D::South,	D::North,	D::East	 },
-	{ D::North,	D::East	,	D::South,	D::West	 },
-	{ D::North,	D::East	,	D::West	,	D::South },
-	{ D::North,	D::South,	D::East	,	D::West	 },
-	{ D::North,	D::South,	D::West	,	D::East	 },
-	{ D::North,	D::West	,	D::East	,	D::South },
-	{ D::North,	D::West	,	D::South,	D::East	 },
-	{ D::South,	D::East	,	D::North,	D::West	 },
-	{ D::South,	D::East	,	D::West	,	D::North },
-	{ D::South,	D::North,	D::East	,	D::West	 },
-	{ D::South,	D::North,	D::West	,	D::East	 },
-	{ D::South,	D::West	,	D::East	,	D::North },
-	{ D::South,	D::West	,	D::North,	D::East	 }
-}
-#N : 24
-
-
-*/
-
-/*
-// Online C++ compiler to run C++ program online
-#include <iostream>
-#include <vector>
-struct TestVector {
-	std::vector<int> vec{
-		1, 2, 3,
-		4, 5, 6,
-		7, 8, 9
-	};
-
-	int nRow = 3;
-	int nCol = 3;
-
-	int& v(int r, int c) {
-		int* p = (&vec.front() + r * nCol + c);
-		return *p;
-	}
-
-	int* northNeighbour(int* p, int step = 1) {
-		int* pv = (p - nCol * step);
-		if (pv < &vec.front()) return nullptr;
-		return pv;
-	}
-};
-
-
-
-int main() {
-	TestVector tv;
-	int& v = tv.v(1, 1);
-	printf("%d\n", v);
-	printf("tv.northNeighbour: %d\n", *tv.northNeighbour(&v, 1));
-	if (!tv.northNeighbour(&v, 2)) {
-		printf("tv.northNeighbour(&v, 2) is null");
-	}
-	return 0;
-}
-*/

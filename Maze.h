@@ -1,7 +1,6 @@
 #pragma once
 #include "AppObject.h"
 #include "Cell.h"
-#include "Agent.h"
 
 class Maze
 {
@@ -11,7 +10,6 @@ public:
 	int nCol = 0;
 	int yOffset = 0; 
 	int xOffset = 0;
-	Agent agent;
 	
 	void init(int nRow_ = 10, int nCol_ = 10);
 
@@ -33,7 +31,9 @@ public:
 
 	void gen();
 
-	POINT cellPos(int r, int c) const ;
+	POINT cellPos(int r, int c) const;
+
+	
 
 	void draw(HDC hdc) const;
 

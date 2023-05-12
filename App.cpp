@@ -34,6 +34,7 @@ void App::init() {
 
 	maze.init(15, 15);
 	maze.gen();
+	agent.init(1, 1, 2);
 
 }
 
@@ -46,6 +47,7 @@ void App::draw(HDC hdc_)  {
 	backBuffer.clear();
 	
 	maze.draw(backBuffer.dc());
+	agent.draw(backBuffer.dc());
 	
 	for (const auto& p : objList) {
 		p->draw(backBuffer.dc());

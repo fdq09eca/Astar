@@ -4,6 +4,7 @@
 #include "AppObject.h"
 #include "Menu.h"
 #include "Maze.h"
+#include "Agent.h"
 
 
 class App : NonCopyable
@@ -21,6 +22,7 @@ public:
 	HBRUSH solidRedBrush = NULL;
 	Menu menu;
 	Maze maze;
+	Agent agent;
 
 	
 	std::vector<std::unique_ptr<AppObject>> objList;
@@ -50,13 +52,7 @@ public:
 	void initTimer(int fps = 10);
 	void initMenu(); 
 	void update() { 
-		/*static int n = 0;
-		maze.gen(n);
-		InvalidateRect(_hWnd, nullptr, false);
-		n++;
-		if (n > maze.nCells()) {
-			n = 0;
-		}*/
+		
 	};
 
 

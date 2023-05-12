@@ -34,7 +34,7 @@ public:
 };
 
 enum class MouseButton {
-	NA = 0, 
+	NA = 0,
 	Left = 1 << 0,    // 1, 0001
 	Middle = 1 << 1,  // 2, 0010 
 	Right = 1 << 2,   // 4, 0100
@@ -85,15 +85,15 @@ class MouseEvent {
 public:
 	using Type = MouseEventType;
 	using Button = MouseButton;
-	POINT pos;
+	POINT pos{0,0};
 	Type eventType = Type::None;
 	Button button = Button::NA;
 	Button buttonState = Button::NA;
-	
+
 	bool isUp()	  const { return eventType == Type::Up; }
 	bool isDown() const { return eventType == Type::Down; }
 	bool isMove() const { return eventType == Type::Move; }
-	
+
 	bool isLButton() const { return button == Button::Left; }
 	bool isMButton() const { return button == Button::Middle; }
 	bool isRButton() const { return button == Button::Right; }
@@ -108,13 +108,13 @@ class BackBuffer : NonCopyable {
 
 public:
 
-	~BackBuffer(){ destroy(); }
-	
+	~BackBuffer() { destroy(); }
+
 	void create(HWND hWnd_) {
 		destroy();
-		HDC wndDC = GetDC(hWnd_);	
+		HDC wndDC = GetDC(hWnd_);
 		_dc = CreateCompatibleDC(wndDC);
-		
+
 		RECT rc;
 		GetClientRect(hWnd_, &rc);
 		_h = rc.bottom - rc.top;
@@ -122,7 +122,7 @@ public:
 		_bitmap = CreateCompatibleBitmap(wndDC, _w, _h); //https://stackoverflow.com/questions/7134465/the-result-of-createcompatibledc-only-has-two-colors
 		SelectObject(_dc, _bitmap);
 		_bgColor = (HBRUSH)GetStockObject(WHITE_BRUSH);
-		
+
 		ReleaseDC(hWnd_, wndDC);
 	}
 
@@ -133,24 +133,24 @@ public:
 			DeleteDC(_dc);
 			_dc = NULL;
 		}
-		
+
 		if (_bitmap) {
 			DeleteObject(_bitmap);
 			_bitmap = NULL;
 		}
 	}
 
-	void clear() { 
+	void clear() {
 		RECT rc{ 0, 0, _w, _h };
 		FillRect(_dc, &rc, _bgColor);
 	}
 
-	void draw(HDC hdc, int x = 0, int y = 0)  {
+	void draw(HDC hdc, int x = 0, int y = 0) {
 		BitBlt(hdc, x, y, _w, _h, _dc, 0, 0, SRCCOPY);
 	}
 };
 
-inline void writeInt(std::ofstream& f, int v) { f.write((char*)&v, sizeof(v));	} // worst implementation, problem: alignment; different cpu archi i.e. little/big endian?
+inline void writeInt(std::ofstream& f, int v) { f.write((char*)&v, sizeof(v)); } // worst implementation, problem: alignment; different cpu archi i.e. little/big endian?
 inline void writeString(std::ofstream& f, const char* str) { f.write(str, strlen(str)); }
 
 inline void readString(std::ifstream& f, char* buff, int nChar) {
@@ -158,10 +158,10 @@ inline void readString(std::ifstream& f, char* buff, int nChar) {
 	f.read(buff, nChar);
 }
 
-inline void readInt(std::ifstream& f, int& v) { 
+inline void readInt(std::ifstream& f, int& v) {
 	assert(!f.eof());
-	f.read((char*)&v, sizeof(v)); 
-	
+	f.read((char*)&v, sizeof(v));
+
 }
 
 class Vector2D {
@@ -175,7 +175,7 @@ public:
 		x = v.x;
 		y = v.y;
 	}
-	
+
 	~Vector2D() { x = 0; y = 0; }
 
 	double distance(const Vector2D& p) const {
@@ -201,7 +201,7 @@ public:
 	}
 
 	inline void operator=(const Vector2D& p) { *this = Vector2D(p); } //recursive here!!
-	
+
 
 	inline Vector2D operator+(const Vector2D& v) const { return Vector2D(x + v.x, y + v.y); }
 	inline Vector2D operator-(const Vector2D& v) const { return Vector2D(x - v.x, y - v.y); }
@@ -245,28 +245,48 @@ inline void my_bzero(T& s) {
 
 
 
-inline int getRandIntInRange(int min_, int max_) { // not uniformly distributed.
+inline int getRandIntInRange(int min_, int max_) { 
 	
+	/*
+	* // exclusive
+	* // not uniformly distributed.
+	* v1 = rand() % 100;         // v1 in the range 0 to 99
+	* v2 = rand() % 100 + 1;     // v2 in the range 1 to 100
+	* v3 = rand() % 30 + 1985;   // v3 in the range 1985-2014 
+	*/
 
 	assert(min_ < max_);
-	
-	int range = max_ + 1 - min_;
-	assert(range > 0);
+	int range = max_ - min_;
+	if (!range) return min_;
 	int num = rand() % range + min_;
 	return num;
 }
 
-inline int getRandInt(int max_) {
+inline int getRandInt(int max_ = RAND_MAX) {
 	return getRandIntInRange(0, max_);
 }
 
 
 inline bool hasValue(const std::vector<int>& vec, int val) {
-	for (const auto& v : vec) { 
-		if (v == val) 
-			return true; 
+	for (const auto& v : vec) {
+		if (v == val)
+			return true;
 	}
 	return false;
 }
 
 enum class MyDirection { NA, North, East, South, West };
+
+inline MyDirection opposite(MyDirection d) {
+	using D = MyDirection;
+	switch (d)
+	{
+	case D::North: return D::South;
+	case D::East:  return D::West;
+	case D::South: return D::North;
+	case D::West:  return D::East;
+	default: 
+		assert(false);
+	}
+	return D::NA;
+}
