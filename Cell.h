@@ -1,5 +1,7 @@
 #pragma once
 #include "AppObject.h"
+
+
 enum class CellState {
 	Unknown = 0,
 	Visited = 1 << 1,
@@ -56,8 +58,7 @@ public:
 	inline void setBlock(bool b)	{ setState(State::Block, b); }
 	inline void setVisit(bool b)	{ setState(State::Visited, b); }
 
-	bool isVisited() const;
-	
+	bool isVisited() const;	
 	bool isBlock() const;
 
 	COLORREF color() const;

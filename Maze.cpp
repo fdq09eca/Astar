@@ -35,6 +35,7 @@ const Cell& Maze::cell(POINT p) const {
 
 
 void Maze::gen(int nb) {
+	// https://www.youtube.com/watch?v=Y37-gB83HKE&t=514s
 	reset();
 	std::set<int> vals;
 	int i;
@@ -50,7 +51,27 @@ void Maze::gen(int nb) {
 		vals.insert(i);
 		cells[i].setBlock(true);
 	}
+}
 
+void Maze::gen() {
+	reset();
+	for (int c = 0; c < nCol; c++) {
+		for (int r = 0; r < nRow; r++) {
+			if (!(r % 2) || !(c % 2)) {
+				auto p = cellPtr(r, c);
+				assert(p);
+				p->setBlock(true);
+			}
+
+			/*if (nCol % 2 == 0 && c == 0) {
+				auto p = cellPtr(r, c);
+				assert(p);
+				p->setBlock(true);
+			}*/
+		}
+	}
+
+	
 }
 
 
@@ -68,3 +89,43 @@ void Maze::draw(HDC hdc) const {
 		}
 	}
 }
+
+/*
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <vector>
+struct TestVector {
+	std::vector<int> vec{
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	};
+
+	int nRow = 3;
+	int nCol = 3;
+
+	int& v(int r, int c) {
+		int* p = (&vec.front() + r * nCol + c);
+		return *p;
+	}
+
+	int* northNeighbour(int* p, int step = 1) {
+		int* pv = (p - nCol * step);
+		if (pv < &vec.front()) return nullptr;
+		return pv;
+	}
+};
+
+
+
+int main() {
+	TestVector tv;
+	int& v = tv.v(1, 1);
+	printf("%d\n", v);
+	printf("tv.northNeighbour: %d\n", *tv.northNeighbour(&v, 1));
+	if (!tv.northNeighbour(&v, 2)) {
+		printf("tv.northNeighbour(&v, 2) is null");
+	}
+	return 0;
+}
+*/

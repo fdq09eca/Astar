@@ -246,7 +246,10 @@ inline void my_bzero(T& s) {
 
 
 inline int getRandIntInRange(int min_, int max_) { // not uniformly distributed.
+	
+
 	assert(min_ < max_);
+	
 	int range = max_ + 1 - min_;
 	assert(range > 0);
 	int num = rand() % range + min_;
@@ -265,3 +268,5 @@ inline bool hasValue(const std::vector<int>& vec, int val) {
 	}
 	return false;
 }
+
+enum class MyDirection { NA, North, East, South, West };

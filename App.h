@@ -50,13 +50,13 @@ public:
 	void initTimer(int fps = 10);
 	void initMenu(); 
 	void update() { 
-		static int n = 0;
+		/*static int n = 0;
 		maze.gen(n);
 		InvalidateRect(_hWnd, nullptr, false);
 		n++;
 		if (n > maze.nCells()) {
 			n = 0;
-		}
+		}*/
 	};
 
 

@@ -14,6 +14,8 @@ bool Cell::isVisited() const {
 	return isState(State::Visited);
 }
 
+
+
 bool Cell::isBlock() const { return isState(State::Block); }
 
 COLORREF Cell::color() const {

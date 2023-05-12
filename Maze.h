@@ -27,7 +27,9 @@ public:
 	inline int nCells() const { return nRow * nCol; }
 	inline void reset() { for (auto& c : cells) { c.init(); } }
 	
-	void gen(int nb = 10);
+	void gen(int nb);
+
+	void gen();
 
 	virtual void draw(HDC hdc) const override;
 

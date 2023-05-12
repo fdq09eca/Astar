@@ -32,7 +32,8 @@ void App::init() {
 	//m->init(10, 10);
 	//objList.emplace_back(std::move(m));
 
-	maze.init(10, 10);
+	maze.init(15, 15);
+	maze.gen();
 
 }
 
