@@ -94,7 +94,7 @@ D Agent::backtrack() {
 	return D::NA;
 }
 
-inline D Agent::nextDirection() {
+D Agent::nextDirection() {
 	auto dirs = unVisitedNeigbourDirections();
 	int nDirs = static_cast<int>(dirs.size());
 	if (!nDirs) return D::NA;
@@ -113,21 +113,21 @@ void Agent::draw(HDC hdc) {
 	SelectObject(hdc, oldBrush);
 }
 
-inline void Agent::onComplete() {
+void Agent::onComplete() {
 	//complete = true;
 	//maze().restart();
 	maze().gen();
 	reset();
 }
 
-inline void Agent::onVisitCell() {
+void Agent::onVisitCell() {
 	Cell* p = currentCellPtr();
 	assert(p);
 	p->setVisit(true);
 	history.emplace_back(r, c);
 }
 
-inline void Agent::breakWall(D nd) {
+void Agent::breakWall(D nd) {
 	Cell* p = peek(nd, 1);
 	if (p && p->isBlock()) {
 		p->setBlock(false);
