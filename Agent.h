@@ -46,7 +46,7 @@ public:
 
 	Cell* peek(D d);
 
-	const std::vector<D> unVisitedNeigbourDirections();
+	const std::vector<D> possibleDirections();
 	
 	D backtrack();
 	

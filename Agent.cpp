@@ -59,7 +59,7 @@ Cell* Agent::peek(D d, int peekSize) {
 }
 
 
-const std::vector<D> Agent::unVisitedNeigbourDirections()
+const std::vector<D> Agent::possibleDirections()
 {
 	std::vector<D> dirs;
 	D ds[] = {D::North, D::East, D::South, D::West};
@@ -95,7 +95,7 @@ D Agent::backtrack() {
 }
 
 D Agent::nextDirection() {
-	auto dirs = unVisitedNeigbourDirections();
+	auto dirs = possibleDirections();
 	int nDirs = static_cast<int>(dirs.size());
 	if (!nDirs) return D::NA;
 	int idx = getRandInt(nDirs);
