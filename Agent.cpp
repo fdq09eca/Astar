@@ -6,36 +6,36 @@ Maze& Agent::maze() { return App::Instance()->maze; }
 
 Cell* Agent::currentCellPtr() { return maze().cellPtr(r, c); }
 
-void Agent::move(D d) {	
-	
+void Agent::move(D d) {
+
 	switch (d)
 	{
-		case D::North: { r -= stepSize; } break;
-		case D::East: { c += stepSize; } break;
-		case D::South: { r += stepSize; } break;
-		case D::West: { c -= stepSize; } break;
-		default: { assert(false); } return;
+		case D::North:	{ r -= stepSize; } break;
+		case D::East:	{ c += stepSize; } break;
+		case D::South:	{ r += stepSize; } break;
+		case D::West:	{ c -= stepSize; } break;
+		default:		{ assert(false); } return;
 	}
-	
+
 	onVisitCell();
 	return;
 }
 
 void Agent::update() {
 	if (complete) return;
-	
+
 	D nd = nextDirection();
-	
+
 	if (nd == D::NA)
 		nd = backtrack();
-	
+
 	if (nd == D::NA) {
 		onComplete();
 		return;
 	}
 
 	move(nd);
-	
+
 	//if (AgentType::MazeBuilder) {
 	breakWall(opposite(nd));
 	//}
@@ -48,10 +48,10 @@ Cell* Agent::peek(D d, int peekSize) {
 	int pc = c;
 	switch (d)
 	{
-		case D::North: { pr = r - peekSize; } break;
-		case D::East: { pc = c + peekSize; } break;
-		case D::South: { pr = r + peekSize; } break;
-		case D::West: { pc = c - peekSize; } break;
+		case D::North:	{ pr = r - peekSize; } break;
+		case D::East:	{ pc = c + peekSize; } break;
+		case D::South:	{ pr = r + peekSize; } break;
+		case D::West:	{ pc = c - peekSize; } break;
 		default: { assert(false); } break;
 	}
 	Cell* p = maze().cellPtr(pr, pc);
@@ -62,15 +62,12 @@ Cell* Agent::peek(D d, int peekSize) {
 const std::vector<D> Agent::possibleDirections()
 {
 	std::vector<D> dirs;
-	D ds[] = {D::North, D::East, D::South, D::West};
+	D ds[] = { D::North, D::East, D::South, D::West };
 	for (D d : ds) {
-		auto p = peek(d); 
-		if (!p)					
-			continue;
-		if (p->isBlock())		
-			continue;
-		if (p->isVisited())	
-			continue;
+		auto p = peek(d);
+		if (!p)				continue;
+		if (p->isBlock())	continue;
+		if (p->isVisited()) continue;
 		dirs.emplace_back(d);
 	}
 	return dirs;
@@ -90,18 +87,19 @@ D Agent::backtrack() {
 			continue;
 		return d;
 	}
-	
+
 	return D::NA;
 }
 
 D Agent::nextDirection() {
 	auto dirs = possibleDirections();
 	int nDirs = static_cast<int>(dirs.size());
-	if (!nDirs) return D::NA;
+	if (!nDirs) 
+		return D::NA;
 	int idx = getRandInt(nDirs);
 	assert(idx < nDirs);
 	return dirs[idx];
-	
+
 }
 
 void Agent::draw(HDC hdc) {
