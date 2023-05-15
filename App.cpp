@@ -33,6 +33,7 @@ void App::init() {
 	//objList.emplace_back(std::move(m));
 
 	maze.init(15, 15);
+	agent.init();
 	/*MazeBuilder agent;
 	agent.build();*/
 
@@ -47,15 +48,16 @@ void App::draw(HDC hdc_)  {
 	backBuffer.clear();
 	
 	maze.draw(backBuffer.dc());
+	agent.draw(backBuffer.dc());
 	
 	
-	for (const auto& p : objList) {
+	/*for (const auto& p : objList) {
 		p->draw(backBuffer.dc());
 	}
 	
 	if (tmpObj) {
 		tmpObj->draw(backBuffer.dc());
-	}
+	}*/
 	
 	backBuffer.draw(hdc_);
 }

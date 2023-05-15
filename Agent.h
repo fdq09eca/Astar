@@ -7,6 +7,12 @@ struct RcIndex {
 	
 	RcIndex() = default;
 	RcIndex(int r_, int c_) : r(r_), c(c_) {};
+	
+	bool isInvalid() { return  r < 0 || c < 0; }
+	bool setInvalid() { return r = -1; c = -1; }
+
+	bool operator==(const RcIndex& idx) const { return idx.r == r && idx.c == c; }
+	bool operator!=(const RcIndex& idx) const { return !operator==(idx); }
 };
 
 using Index = RcIndex;
@@ -32,7 +38,7 @@ public:
 
 	virtual ~Agent() {};
 	Cell* currentCellPtr();
-
+	inline Index currentCellIndex() { return Index(r, c); }
 	void move(D d);
 
 	virtual void update();
@@ -45,6 +51,7 @@ public:
 	virtual void onComplete();
 	virtual D nextDirection();
 	virtual std::vector<D> possibleDirections();
+	std::vector<Cell*> possibleCells();
 	virtual void init(int r_, int c_, int stepSize_) ;
 	virtual void onVisitCell();
 

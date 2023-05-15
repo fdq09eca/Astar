@@ -4,7 +4,10 @@
 Maze& Agent::maze() { return App::Instance()->maze; }
 
 
-Cell* Agent::currentCellPtr() { return maze().cellPtr(r, c); }
+Cell* Agent::currentCellPtr() { 
+	Maze& m = maze();
+	return m.cellPtr(r, c); 
+}
 
 void Agent::move(D d) {
 
@@ -69,6 +72,18 @@ std::vector<D> Agent::possibleDirections()
 	return dirs;
 }
 
+std::vector<Cell*> Agent::possibleCells()
+{
+	std::vector<Cell*> ps;
+	auto ds = possibleDirections();
+	for (D d : ds) {
+		auto p = peek(d);
+		assert(p);
+		ps.emplace_back(p);
+	}
+	return ps;
+}
+
 D Agent::backtrack() {
 
 	while (true) {
@@ -111,7 +126,7 @@ void Agent::init(int r_, int c_, int stepSize_) {
 	r = r_;
 	c = c_;
 	stepSize = stepSize_;
-	onVisitCell();
+	Agent::onVisitCell();
 }
 
 

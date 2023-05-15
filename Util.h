@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 // win32 
 #define COLOR_WHITE		RGB(255,255,255)

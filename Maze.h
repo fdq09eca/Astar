@@ -23,8 +23,10 @@ public:
 
 	inline int width() const { return nCol * Cell::size; }
 	inline int height() const { return nRow * Cell::size; }
-
 	inline int nCells() const { return nRow * nCol; }
+	
+	inline bool inRange(int r, int c) const { return (r >= 0 && r < nRow && c >= 0 && c < nCol); }
+
 	inline void reset() { for (auto& c : cells) { c.init(); } }
 	
 	void genRandom(int nb);
@@ -42,7 +44,7 @@ public:
 		}
 		return vec;
 	}
-
+	
 	
 	inline int cellRow(Cell* p) const {
 		int d = static_cast<int>(p - &cells.front());

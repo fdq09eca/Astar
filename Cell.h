@@ -53,6 +53,7 @@ public:
 	static const int size = 20;
 
 	Cell(){ init(); }
+	~Cell() { }
 	inline void reset()				{ init(); }
 	inline void init()				{ setBlock(false); setVisit(false); }
 	inline void setBlock(bool b)	{ setState(State::Block, b); }

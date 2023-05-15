@@ -1,6 +1,7 @@
 #include "Maze.h"
 #include "MazeBuilder.h"
-
+#include "AgentAstar.h"
+using AA = AgentAstar;
 void Maze::init(int nRow_, int nCol_) {
 	nRow = nRow_;
 	nCol = nCol_;
@@ -82,7 +83,6 @@ void Maze::draw(HDC hdc) const {
 			assert(p);
 			POINT pos = cellPos(r, c);
 			p->drawAt(hdc, pos);
-
 		}
 	}
 }

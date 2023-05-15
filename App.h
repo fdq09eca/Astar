@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "Maze.h"
 #include "MazeBuilder.h"
+#include "AgentAstar.h"
 
 
 class App : NonCopyable
@@ -22,6 +23,8 @@ public:
 	HBRUSH solidRedBrush = NULL;
 	Menu menu;
 	Maze maze;
+	AgentAstar agent;
+	
 	
 
 	
