@@ -66,6 +66,8 @@ public:
 
 	void drawAt(HDC hdc, POINT pos) const;
 
+	void drawAt(HDC hdc, POINT pos, COLORREF color_) const;
+
 
 };
 

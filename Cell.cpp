@@ -25,8 +25,13 @@ COLORREF Cell::color() const {
 }
 
 void Cell::drawAt(HDC hdc, POINT pos) const {
+	drawAt(hdc, pos, color());
+}
+
+
+void Cell::drawAt(HDC hdc, POINT pos, COLORREF color_) const {
 	auto oldBrush = SelectObject(hdc, GetStockObject(DC_BRUSH));
-	auto oldColor = SetDCBrushColor(hdc, color());
+	auto oldColor = SetDCBrushColor(hdc, color_);
 	::Rectangle(hdc, pos.x, pos.y, pos.x + size, pos.y + size);
 	SetDCBrushColor(hdc, oldColor);
 	SelectObject(hdc, oldBrush);

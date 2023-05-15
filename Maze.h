@@ -40,6 +40,7 @@ public:
 	std::vector<Cell*> unVisitedCells() {
 		std::vector<Cell*> vec;
 		for (auto& c : cells) { 
+			if (c.isBlock()) continue;
 			if (!c.isVisited()) {  vec.emplace_back(&c);  }
 		}
 		return vec;

@@ -56,7 +56,7 @@ public:
 	virtual void onVisitCell();
 
 
-	void draw(HDC hdc);
+	virtual void draw(HDC hdc);
 
 };
 

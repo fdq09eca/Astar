@@ -43,6 +43,8 @@ public:
 
 	void onComplete() override;
 
+	virtual void draw(HDC hdc) override;
+
 
 	
 };

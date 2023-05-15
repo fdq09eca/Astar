@@ -46,7 +46,7 @@ public:
 	void initTimer(int fps = 10);
 	void initMenu(); 
 	void update() { 
-		/*agent.update();*/
+		agent.update();
 		
 	};
 

@@ -22,10 +22,16 @@ Index AgentAstar::cellPtrToIndex(Cell* p) {
 
 Index AgentAstar::randomIndex() {
 	Maze& m = maze();
-	int n = m.nCells();
-	int randIdx = getRandInt(n);
-	Cell* p = m.unVisitedCells()[randIdx];
-	return cellPtrToIndex(p);
+	auto unvisitedCells = m.unVisitedCells();
+	int n = (int)unvisitedCells.size();
+	int r = getRandInt(n);
+	Cell* p = unvisitedCells[r];
+	Index rIdx = cellPtrToIndex(p);
+	if (maze().inRange(rIdx.r, rIdx.c)) {
+		return rIdx;
+	}
+	assert(false);
+	return Index{ -1, -1 };
 }
 
 void AgentAstar::setDst(int r, int c) {
@@ -108,6 +114,17 @@ void AgentAstar::update() {
 
 void AgentAstar::onComplete() {
 	complete = true;
+}
 
+void AgentAstar::draw(HDC hdc) {
+	Agent::draw(hdc);
+	for (Index idx : frontier) {
+		auto p = maze().cellPtr(idx.r, idx.c);
+		assert(p);
+		p->drawAt(hdc, maze().cellPos(idx.r, idx.c), COLOR_BLUE);
+	}
+
+	dstCellPtr()->drawAt(hdc, maze().cellPos(dst.r, dst.c), COLOR_GREEN);
+	
 }
 
