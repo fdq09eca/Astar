@@ -133,6 +133,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_TIMER: {
 		App::Instance()->update();
+		InvalidateRect(hWnd, nullptr, false); 
 	} break;
 	
 	case WM_CREATE: { } break;

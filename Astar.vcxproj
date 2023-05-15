@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="MazeBuilder.h" />
+    <ClInclude Include="AgentAstar.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="AppObject.h" />
     <ClInclude Include="Astar.h" />
@@ -145,6 +147,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="MazeBuilder.cpp" />
+    <ClCompile Include="AgentAstar.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppObject.cpp" />
     <ClCompile Include="Astar.cpp" />

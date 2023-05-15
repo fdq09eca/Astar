@@ -2,7 +2,7 @@
 #include "AppObject.h"
 #include "Cell.h"
 
-class Maze
+class Maze //https://www.youtube.com/watch?v=sVcB8vUFlmU
 {
 public:
 	std::vector<Cell> cells;
@@ -27,22 +27,38 @@ public:
 	inline int nCells() const { return nRow * nCol; }
 	inline void reset() { for (auto& c : cells) { c.init(); } }
 	
-	void gen(int nb);
+	void genRandom(int nb);
 
-	void gen();
+	void genDefault();
 
-	void restart() {
-		for (auto& c : cells) { 
-			if (c.isBlock()) 
-				continue;
-			c.reset(); 
-		}
-	}
+	void restart() { for (auto& c : cells) {  if (!c.isBlock())  c.reset(); } }
 
 	POINT cellPos(int r, int c) const;
 
-	
+	std::vector<Cell*> unVisitedCells() {
+		std::vector<Cell*> vec;
+		for (auto& c : cells) { 
+			if (!c.isVisited()) {  vec.emplace_back(&c);  }
+		}
+		return vec;
+	}
 
+	
+	inline int cellRow(Cell* p) const {
+		int d = static_cast<int>(p - &cells.front());
+		int r = d / nCol;
+		assert(r >= 0 && r < nRow);
+		return r;
+	}
+
+	inline int cellCol(Cell* p) const {
+		int d = static_cast<int>(p - &cells.front());
+		int c = d - cellRow(p) * nCol;
+		assert(c >= 0 && c < nCol);
+		return c;
+	}
+
+	
 	void draw(HDC hdc) const;
 
 	

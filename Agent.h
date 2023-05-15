@@ -4,6 +4,8 @@
 
 struct RcIndex {
 	int r = 0; int c = 0;
+	
+	RcIndex() = default;
 	RcIndex(int r_, int c_) : r(r_), c(c_) {};
 };
 
@@ -11,51 +13,43 @@ using Index = RcIndex;
 using D = MyDirection;
 
 class Maze;
-
-
-class Agent //mazeBuilder
+class Agent
 {
 
-private:
+protected:
 	int r = 0;
 	int c = 0;
 	int stepSize = 0;
-	
-	std::vector<Index> history;
-	Maze& maze();
+
 	bool complete = false;
+	std::vector<Index> history;
+	
 
 public:
+	Maze& maze();
+	Agent() = default;
+	Agent(int r_, int c_, int stepSize_) : r(r_), c(c_), stepSize(stepSize_) {};
+
+	virtual ~Agent() {};
 	Cell* currentCellPtr();
-	D nextDirection();
-	
-	void init(int r_, int c_, int stepSize_) { 
-		r = r_; 
-		c = c_;
-		stepSize = stepSize_;
-		onVisitCell();
-	}
-	
-	inline void reset(){ init(1, 1, stepSize); }
-	
+
 	void move(D d);
 
-	void update();
+	virtual void update();
 
 	Cell* peek(D d, int peekSize);
 
 	Cell* peek(D d);
-
-	const std::vector<D> possibleDirections();
 	
 	D backtrack();
-	
+	virtual void onComplete();
+	virtual D nextDirection();
+	virtual std::vector<D> possibleDirections();
+	virtual void init(int r_, int c_, int stepSize_) ;
+	virtual void onVisitCell();
+
+
 	void draw(HDC hdc);
 
-	void onComplete();
-
-	void onVisitCell();
-
-	void breakWall(D nd);
 };
 

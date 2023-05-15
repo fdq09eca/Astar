@@ -10,11 +10,11 @@ void Agent::move(D d) {
 
 	switch (d)
 	{
-		case D::North:	{ r -= stepSize; } break;
-		case D::East:	{ c += stepSize; } break;
-		case D::South:	{ r += stepSize; } break;
-		case D::West:	{ c -= stepSize; } break;
-		default:		{ assert(false); } return;
+	case D::North: { r -= stepSize; } break;
+	case D::East: { c += stepSize; } break;
+	case D::South: { r += stepSize; } break;
+	case D::West: { c -= stepSize; } break;
+	default: { assert(false); } return;
 	}
 
 	onVisitCell();
@@ -35,10 +35,6 @@ void Agent::update() {
 	}
 
 	move(nd);
-
-	//if (AgentType::MazeBuilder) {
-	breakWall(opposite(nd));
-	//}
 }
 
 Cell* Agent::peek(D d) { return peek(d, stepSize); }
@@ -48,18 +44,18 @@ Cell* Agent::peek(D d, int peekSize) {
 	int pc = c;
 	switch (d)
 	{
-		case D::North:	{ pr = r - peekSize; } break;
-		case D::East:	{ pc = c + peekSize; } break;
-		case D::South:	{ pr = r + peekSize; } break;
-		case D::West:	{ pc = c - peekSize; } break;
-		default: { assert(false); } break;
+	case D::North: { pr = r - peekSize; } break;
+	case D::East: { pc = c + peekSize; } break;
+	case D::South: { pr = r + peekSize; } break;
+	case D::West: { pc = c - peekSize; } break;
+	default: { assert(false); } break;
 	}
 	Cell* p = maze().cellPtr(pr, pc);
 	return p;
 }
 
 
-const std::vector<D> Agent::possibleDirections()
+std::vector<D> Agent::possibleDirections()
 {
 	std::vector<D> dirs;
 	D ds[] = { D::North, D::East, D::South, D::West };
@@ -94,7 +90,7 @@ D Agent::backtrack() {
 D Agent::nextDirection() {
 	auto dirs = possibleDirections();
 	int nDirs = static_cast<int>(dirs.size());
-	if (!nDirs) 
+	if (!nDirs)
 		return D::NA;
 	int idx = getRandInt(nDirs);
 	assert(idx < nDirs);
@@ -111,24 +107,20 @@ void Agent::draw(HDC hdc) {
 	SelectObject(hdc, oldBrush);
 }
 
-void Agent::onComplete() {
-	//complete = true;
-	//maze().restart();
-	maze().gen();
-	reset();
+void Agent::init(int r_, int c_, int stepSize_) {
+	r = r_;
+	c = c_;
+	stepSize = stepSize_;
+	onVisitCell();
 }
+
+
+
+void Agent::onComplete() { complete = true; }
 
 void Agent::onVisitCell() {
 	Cell* p = currentCellPtr();
 	assert(p);
 	p->setVisit(true);
 	history.emplace_back(r, c);
-}
-
-void Agent::breakWall(D nd) {
-	Cell* p = peek(nd, 1);
-	if (p && p->isBlock()) {
-		p->setBlock(false);
-		p->setVisit(true);
-	}
 }

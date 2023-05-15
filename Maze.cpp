@@ -1,10 +1,12 @@
 #include "Maze.h"
+#include "MazeBuilder.h"
 
 void Maze::init(int nRow_, int nCol_) {
 	nRow = nRow_;
 	nCol = nCol_;
 	cells.resize(nCells());
-	gen();
+	genDefault();
+	MazeBuilder::build();
 }
 
 const Cell* Maze::cellPtr(int r, int c) const {
@@ -35,7 +37,7 @@ const Cell& Maze::cell(POINT p) const {
 
 
 
-void Maze::gen(int nb) {
+void Maze::genRandom(int nb) {
 	// https://www.youtube.com/watch?v=Y37-gB83HKE&t=514s
 	reset();
 	std::set<int> vals;
@@ -52,7 +54,7 @@ void Maze::gen(int nb) {
 	}
 }
 
-void Maze::gen() {
+void Maze::genDefault() {
 	reset();
 	assert(nCol % 2 && nRow % 2); // for now.
 	for (int c = 0; c < nCol; c++) {
@@ -64,8 +66,6 @@ void Maze::gen() {
 			}
 		}
 	}
-
-	
 }
 
 POINT Maze::cellPos(int r, int c)  const {

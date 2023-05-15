@@ -4,7 +4,7 @@
 #include "AppObject.h"
 #include "Menu.h"
 #include "Maze.h"
-#include "Agent.h"
+#include "MazeBuilder.h"
 
 
 class App : NonCopyable
@@ -22,7 +22,7 @@ public:
 	HBRUSH solidRedBrush = NULL;
 	Menu menu;
 	Maze maze;
-	Agent agent;
+	
 
 	
 	std::vector<std::unique_ptr<AppObject>> objList;
@@ -39,24 +39,13 @@ public:
 
 	void init();
 	void destroy();
-
-	/*Maze& maze_() {
-		for (auto& obj : objList) {
-			if (obj->type() == AppObjectType::Maze) {
-				auto m = (Maze) *obj ;
-				return m;
-			}
-		}
-	}*/
 	
 	void initTimer(int fps = 10);
 	void initMenu(); 
 	void update() { 
-		agent.update();
-		InvalidateRect(_hWnd, nullptr, false);
+		/*agent.update();*/
+		
 	};
-
-
 
 	void setHwnd(HWND hWnd_);
 
@@ -76,7 +65,3 @@ public:
 	inline void load(const wchar_t* fpath) { };
 	
 };
-
-//extern App* g_internal_app_ptr;
-//inline App* g_app() { return g_internal_app_ptr; };
-//inline void g_set_app(App* p) { g_internal_app_ptr = p; };
