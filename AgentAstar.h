@@ -1,9 +1,25 @@
 #pragma once
 #include "Agent.h"
 
-class AgentAstar : public Agent //https://www.youtube.com/watch?v=-L-WgKMFuhE
+class AgentAstar : public Agent 
+	//https://www.youtube.com/watch?v=-L-WgKMFuhE
+	//https://www.youtube.com/watch?v=i0x5fj4PqP4&t=454s
 {
 private:
+	class Node {
+		Node* parent = nullptr;
+		Index idx{-1, -1};
+	public:
+		Node(Index idx_) :idx(idx_) {};
+
+		int gCost() { return parent? parent->gCost() + distance(*parent, *this) : 0; }
+		
+		int cost(Node dstNode) { return gCost() + heuristic(dstNode); }
+		int distance(Node a, Node b) { return abs(a.idx.r - b.idx.r) + abs(a.idx.c - b.idx.c); }
+		int heuristic(Node dstNode) { return distance(*this, dstNode); }
+	};
+
+
 	inline void init(int r_, int c_, int stepSize_) override { Agent::init(r_, c_, stepSize_); }
 
 public:
