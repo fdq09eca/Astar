@@ -30,10 +30,10 @@ public:
 	void onVisitCell() override;
 
 
-	inline int srcDistance(Index idx)	{ return distance(idx, src); }
+	inline int srcDistance(Index idx)	{ return distance(idx, src);}
 	inline int dstDistance(Index idx)	{ return distance(idx, dst); }
 	inline int cost(Index idx)			{ return srcDistance(idx) + dstDistance(idx); }
-	inline int distance(int r0, int c0, int r1, int c1) { return abs(r0 - r1) + abs(c0 + c1); }
+	inline int distance(int r0, int c0, int r1, int c1) { return abs(r0 - r1) + abs(c0 - c1); }
 	inline int distance(Index i0, Index i1) { return distance(i0.r, i0.c, i1.r, i1.c); }
 
 

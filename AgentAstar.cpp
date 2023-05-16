@@ -6,9 +6,13 @@
 AgentAstar::AgentAstar() : Agent() { }
 
 void AgentAstar::init() {
+	frontier.clear();
+	history.clear();
+
 	Agent::init(1, 1, 1);
 	setSrc(r, c);
 	dst = randomIndex();
+	complete = false;
 }
 
 Index AgentAstar::cellPtrToIndex(Cell* p) {
@@ -65,7 +69,7 @@ Index AgentAstar::nextIndex() {
 
 	if (frontier.size() == 0) { return Index{ -1, -1 }; }
 
-	std::sort(frontier.begin(), frontier.end(),  [this](Index p0, Index p1) { return cost(p0) > cost(p1); } );
+	std::sort(frontier.begin(), frontier.end(),  [this](Index p0, Index p1) { return cost(p0)  + distance(p0, dst)> cost(p1) + distance(p1, dst); });
 
 	return frontier.back(); //minCostCell
 }
@@ -86,8 +90,21 @@ void AgentAstar::onVisitCell() {
 inline Cell* AgentAstar::dstCellPtr() { return maze().cellPtr(dst.r, dst.c); }
 
 Index AgentAstar::backtrackIndex() {
-	printf("!!");
+	while (true) {
+		if (!history.size()) return Index{ -1, -1 };
+
+		Index h = history.back();
+		history.pop_back();
+		r = h.r;
+		c = h.c;
+		Index idx = nextIndex();
+		if (idx.isInvalid())
+			continue;
+		return idx;
+	}
+
 	return Index{ -1, -1 };
+	
 }
 
 void AgentAstar::update() {
@@ -114,6 +131,8 @@ void AgentAstar::update() {
 
 void AgentAstar::onComplete() {
 	complete = true;
+	maze().init(15, 15);
+	init();
 }
 
 void AgentAstar::draw(HDC hdc) {
